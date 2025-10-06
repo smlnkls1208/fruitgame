@@ -22,7 +22,7 @@ let nav = () => {
 let go = (page, attribute) => {
     let pages = ['start', 'game', 'end'];
     panel = page;
-    $(`#${ page }`).setAttribute('class', attribute);
+    $(`#${page}`).setAttribute('class', attribute);
     pages.forEach(el => {
         if(el !== page) $(`#${el}`).setAttribute('class', 'd-none');
     })
