@@ -150,6 +150,12 @@ class Game {
         this.fruits = [Apple, Banana, Orange];
         this.hp = 3;
         this.points = 0;
+        this.time= {
+          m1: 0,
+          m2: 0,
+          s1: 0,
+          s2: 0
+        };
     }
 
     start () {
@@ -166,6 +172,7 @@ class Game {
         requestAnimationFrame(() => {
             this.counterForTimer++;
             if (this.counterForTimer % 60 === 0) {
+                this.timer();
                 this.randomFruitGenerate();
             }
             this.updateElements();
@@ -200,5 +207,23 @@ class Game {
             return true;
         }
         return false;
+    }
+
+    timer() {
+        let time = this.time;
+        time.s2++;
+        if(time.s2 >= 10){
+            time.s2 = 0;
+            time.s1++;
+        }
+        if(time.s1 >= 6){
+            time.s1 = 0;
+            time.m2++;
+        }
+        if(time.m2 >= 10){
+            time.m2 = 0;
+            time.m1++;
+        }
+        $('#timer').innerHTML = `${time.m1}${time.m2}:${time.s1}${time.s2}`;
     }
 }
