@@ -198,6 +198,8 @@ class Game {
         params.forEach((param, ind) => {
             $(`#${param}`).innerHTML = values[ind];
         });
+
+
     }
 
     remove(el) {
