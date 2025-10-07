@@ -60,11 +60,17 @@ class Fruit extends Drawable {
         this.h = 70;
         this.y = 60;
         this.x = random(0, window.innerWidth - this.w);
+        this.offsets.x = random(-5, 5)
         this.offsets.y = 3;
         this.createElement();
     }
 
     update(){
+        this.x += this.offsets.x;
+        this.y += this.offsets.y;
+        if(this.x <= 0 || this.x >= window.innerWidth - this.w){
+            this.offsets.x *= -1;
+        }
         if(this.isCollision(this.game.player)) this.takePoint();
         if(this.y > window.innerHeight) this.takeDamage();
         super.update();
@@ -200,6 +206,7 @@ class Game {
         return element;
     }
 
+
     keyEvents() {
         addEventListener('keydown', ev => {
             if(ev.code === "Escape") this.pause = !this.pause;
@@ -208,8 +215,7 @@ class Game {
 
     loop() {
         requestAnimationFrame(() => {
-            if(!this.pause) {
-                this.counterForTimer++;
+            if(!this.pause) {                this.counterForTimer++;
                 if (this.counterForTimer % 60 === 0) {
                     this.timer();
                     this.randomFruitGenerate();
@@ -220,8 +226,16 @@ class Game {
                 $('.pause').style.display = 'none';
                 this.updateElements();
                 this.setParams();
+                const allElements = document.querySelectorAll('*');
+                allElements.forEach(el => {
+                    el.style.animationPlayState = 'running';
+                })
             }else if(this.pause){
                 $('.pause').style.display = 'flex';
+                const allElements = document.querySelectorAll('*');
+                allElements.forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                })
             }
             if(!this.ended) this.loop();
         });
