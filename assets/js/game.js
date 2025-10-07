@@ -31,6 +31,10 @@ class Drawable {
         `;
     }
 
+    removeElement() {
+        this.element.remove();
+    }
+
     isCollision(element) {
         let a = {
             x1: this.x,
@@ -61,10 +65,25 @@ class Fruit extends Drawable {
     }
 
     update(){
-        if(this.isCollision(this.game.player)) console.log('plus point');
-        if(this.y > window.innerHeight) console.log('minus hp');
+        if(this.isCollision(this.game.player)) this.takePoint();
+        if(this.y > window.innerHeight) this.takeDamage();
         super.update();
     }
+
+    takePoint() {
+        if(this.game.remove(this)){
+            this.removeElement();
+            this.game.points++;
+        }
+    }
+
+    takeDamage() {
+        if(this.game.remove(this)){
+            this.removeElement();
+            this.game.hp--;
+        }
+    }
+
 }
 
 class Banana extends Fruit {
@@ -129,6 +148,8 @@ class Game {
         this.player = this.generate(Player);
         this.counterForTimer = 0;
         this.fruits = [Apple, Banana, Orange];
+        this.hp = 3;
+        this.points = 0;
     }
 
     start () {
@@ -165,10 +186,19 @@ class Game {
     }
 
     setParams() {
-        let params = ['name'];
-        let values = [this.name];
+        let params = ['name', 'points', 'hp'];
+        let values = [this.name, this.points, this.hp];
         params.forEach((param, ind) => {
             $(`#${param}`).innerHTML = values[ind];
         });
+    }
+
+    remove(el) {
+        let idx = this.elements.indexOf(el);
+        if(idx !== -1){
+            this.elements.splice(idx, 1);
+            return true;
+        }
+        return false;
     }
 }
